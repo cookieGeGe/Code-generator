@@ -48,4 +48,3 @@ class CodeGenerator(object):
             raise Exception(e)
         finally:
             f.close()
-    
