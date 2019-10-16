@@ -13,6 +13,7 @@ class CodeGenerator(object):
     def __init__(self, template_dir):
         self.jinja = None
         self.template_dir = template_dir
+        self._file_content = None
         self.template = None
         self.init()
 
@@ -36,15 +37,14 @@ class CodeGenerator(object):
     def render(self, **kwargs):
         if self.template is None:
             raise Exception('请选择设置模板')
-        return self.template.render(**kwargs)
+        self._file_content = self.template.render(**kwargs)
 
-    def save(self, out_dir, encoding='utf-8'):
+    def save(self, file_path, encoding='utf-8'):
+        out_dir = os.path.dirname(file_path)
         if os.path.exists(out_dir):
             os.makedirs(out_dir)
         try:
-            with open(os.path.join(out_dir, self.filename), '+w', encoding=encoding) as f:
-                f.write(self.render())
+            with open(file_path, '+w', encoding=encoding) as f:
+                f.write(self._file_content)
         except Exception as e:
             raise Exception(e)
-        finally:
-            f.close()
