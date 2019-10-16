@@ -29,17 +29,31 @@ class CodeGenerator(object):
         self.jinja = Environment(loader=FileSystemLoader(self.template_dir))
 
     def get_template(self):
+        """
+        获取模板对象
+        """
         return self.template
 
     def set_template(self, template):
         self.template = self.jinja.get_template(template)
 
     def render(self, **kwargs):
+        """
+        渲染模板
+        :param kwargs:模板中的参数
+        :return:
+        """
         if self.template is None:
             raise Exception('请选择设置模板')
         self._file_content = self.template.render(**kwargs)
 
     def save(self, file_path, encoding='utf-8'):
+        """
+        模板输出到具体文件
+        :param file_path:输出文件路径
+        :param encoding:输出编码格式
+        :return:
+        """
         out_dir = os.path.dirname(file_path)
         if os.path.exists(out_dir):
             os.makedirs(out_dir)
