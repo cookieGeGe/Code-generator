@@ -37,7 +37,7 @@ class CodeGenerator(object):
     def set_template(self, template):
         self.template = self.jinja.get_template(template)
 
-    def render(self, **kwargs):
+    def render(self, *args, **kwargs):
         """
         渲染模板
         :param kwargs:模板中的参数
