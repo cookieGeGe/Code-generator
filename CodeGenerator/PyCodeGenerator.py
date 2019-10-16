@@ -31,8 +31,8 @@ class CodeGenerator(object):
     def get_template(self):
         return self.template
 
-    def set_template(self, name):
-        self.template = self.jinja.get_template(name)
+    def set_template(self, template):
+        self.template = self.jinja.get_template(template)
 
     def render(self, **kwargs):
         if self.template is None:
