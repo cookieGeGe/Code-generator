@@ -7,12 +7,13 @@
 from abc import ABCMeta, abstractmethod
 
 from CodeGenerator.PyCodeGenerator import CodeGenerator
+from utils.sqlutils import mysql_db
 
 
 class GeneratorBase(metaclass=ABCMeta):
     template_dir = ''
 
-    def __init__(self, db, template):
+    def __init__(self, template, db=None):
         self._generator = None
         self.db = db
         self.template = template
@@ -21,6 +22,8 @@ class GeneratorBase(metaclass=ABCMeta):
 
     def _init(self):
         self._generator = CodeGenerator(self.template_dir)
+        if self.db is None:
+            self.db = mysql_db
 
     def render(self, *args, **kwargs):
         self._generator.set_template(self.template)
