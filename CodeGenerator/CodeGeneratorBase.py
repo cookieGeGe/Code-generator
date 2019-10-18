@@ -29,7 +29,11 @@ class GeneratorBase(metaclass=ABCMeta):
         self._generator.save(out_file_path, encoding)
 
     @abstractmethod
-    def query_data(self):
+    def query_data(self, db_name, tb_name, expect_field):
+        query_sql = r"""SELECT COLUMN_NAME as name,COLUMN_COMMENT as content,DATA_TYPE as datatype 
+                        FROM information_schema.COLUMNS 
+                        WHERE TABLE_NAME='{}' AND TABLE_SCHEMA='{}';""".format(tb_name, db_name)
+        result = self.db.query(query_sql)
         pass
 
     @abstractmethod
