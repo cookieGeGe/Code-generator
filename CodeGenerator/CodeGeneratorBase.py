@@ -16,6 +16,7 @@ class GeneratorBase(metaclass=ABCMeta):
         self._generator = None
         self.db = db
         self.template = template
+        self.table_info = None
         self._init()
 
     def _init(self):
@@ -29,12 +30,16 @@ class GeneratorBase(metaclass=ABCMeta):
         self._generator.save(out_file_path, encoding)
 
     @abstractmethod
-    def query_data(self, db_name, tb_name, expect_field):
+    def query_data(self, db_name, tb_name, expect_field=['ID']):
         query_sql = r"""SELECT COLUMN_NAME as name,COLUMN_COMMENT as content,DATA_TYPE as datatype 
                         FROM information_schema.COLUMNS 
                         WHERE TABLE_NAME='{}' AND TABLE_SCHEMA='{}';""".format(tb_name, db_name)
-        result = self.db.query(query_sql)
-        pass
+        self.table_info = self.db.query(query_sql)
+        filter_data = []
+        for column in self.table_info:
+            if column['name'] not in expect_field:
+                filter_data.append(column)
+        return filter_data
 
     @abstractmethod
     def formatter_data(self):
