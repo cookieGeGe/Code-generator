@@ -8,7 +8,8 @@
 
 class DBConfig:
 
-    def get_db_config(self, db_type):
+    @staticmethod
+    def get_db_config(db_type):
         if db_type == 'dev':
             return Development()
 

@@ -4,6 +4,7 @@
 # @Site :  
 # @File : codeGeneratorfacotry.py 
 # @Software: PyCharm
+from CodeGenerator.CodeGeneratorBase import GeneratorTeseHtml
 
 
 class CodeGeneratorFactory:
@@ -12,5 +13,10 @@ class CodeGeneratorFactory:
         pass
 
     def get_codegenerator(self, generator_type):
-        if generator_type:
-            pass
+        """
+        获取指定代码生成器对象
+        :param generator_type:对象类型
+        :return:
+        """
+        if generator_type == 'test':
+            return GeneratorTeseHtml('test.html')

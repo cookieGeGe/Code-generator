@@ -2,7 +2,7 @@
 # @Time : 2019/9/27 12:32 
 # @Author :  
 # @Site :  
-# @File : PyCodeGenerator.py 
+# @File : CodeGeneratorCore.py
 # @Software: PyCharm
 import os
 from jinja2 import Environment, FileSystemLoader
@@ -45,7 +45,7 @@ class CodeGenerator(object):
         """
         if self.template is None:
             raise Exception('请选择设置模板')
-        self._file_content = self.template.render(**kwargs)
+        self._file_content = self.template.render(*args, **kwargs)
 
     def save(self, file_path, encoding='utf-8'):
         """
@@ -55,7 +55,7 @@ class CodeGenerator(object):
         :return:
         """
         out_dir = os.path.dirname(file_path)
-        if os.path.exists(out_dir):
+        if not os.path.exists(out_dir):
             os.makedirs(out_dir)
         try:
             with open(file_path, '+w', encoding=encoding) as f:
