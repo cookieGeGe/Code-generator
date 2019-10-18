@@ -6,7 +6,7 @@
 # @Software: PyCharm
 import os
 
-from CodeGenerator.codeGeneratorfacotry import CodeGeneratorFactory
+from CodeGenerator.codeGeneratorfactory import CodeGeneratorFactory
 
 BaseDir = os.path.dirname(os.path.abspath(__name__))
 templatedir = os.path.join(BaseDir, 'template')
