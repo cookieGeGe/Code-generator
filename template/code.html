@@ -7,6 +7,11 @@
     <title>代码生成器</title>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/plugins/layui/css/layui.css" rel="stylesheet">
+    <style type="text/css">
+        .layui-form-checkbox i {
+        height:30px;
+        }
+    </style>
 </head>
 <body layadmin-themealias="default">
 
@@ -17,7 +22,8 @@
                 <h2 style="text-align: center">代码生成器</h2>
             </div>
             <div class="layui-card-body">
-                <form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+                <form class="layui-form">
+
                     <div class="layui-form-item">
                         <label class="layui-form-label">输入框</label>
                         <div class="layui-input-block">
@@ -25,16 +31,17 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">下拉选择框</label>
+                        <label class="layui-form-label">选择数据表</label>
                         <div class="layui-input-block">
                             <select name="interest" lay-filter="aihao">
-                                <option value="0">写作</option>
-                                <option value="1">阅读</option>
+                                {% for item in table_list %}
+                                <option value="{{ item.value }}">{{item.name}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">复选框</label>
+                        <label class="layui-form-label">生成代码类型</label>
                         <div class="layui-input-block">
                             <input type="checkbox" name="like[write]" title="写作">
                             <input type="checkbox" name="like[read]" title="阅读">
@@ -61,11 +68,11 @@
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="/static/plugins/layui/layui.all.js"></script>
 <script>
-    layui.use('form', function () {
-        var form = layui.form;
-
-        //各种基于事件的操作，下面会有进一步介绍
-    });
+    // layui.use('form', function () {
+    //     var form = layui.form;
+    //
+    //     //各种基于事件的操作，下面会有进一步介绍
+    // });
 </script>
 </body>
 </html>
