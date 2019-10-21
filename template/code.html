@@ -9,50 +9,64 @@
     <link href="/static/plugins/layui/css/layui.css" rel="stylesheet">
     <style type="text/css">
         .layui-form-checkbox i {
-        height:30px;
+            height: 30px;
         }
+
+        .layui-form-item {
+            margin-bottom: 15px;
+             clear: none;
+            *zoom: 1;
+        }
+
+        .layui-form-item .layui-form-checkbox {
+            margin-top: 4px;
+            display: table;
+        }
+
     </style>
 </head>
 <body layadmin-themealias="default">
 
-<div class="layui-container">
+<div class="layui-container" style="margin-top: 50px;">
     <div class="layui-row">
         <div class="layui-card">
             <div class="layui-card-header" style="text-align: center">
                 <h2 style="text-align: center">代码生成器</h2>
             </div>
-            <div class="layui-card-body">
+            <div class="layui-card-body layui-col-sm12">
                 <form class="layui-form">
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">输入框</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">
+                    <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label">输入框</label>-->
+                    <!--<div class="layui-input-block">-->
+                    <!--<input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <div class="layui-row">
+                        <div class="layui-form-item layui-col-md6">
+                            <label class="layui-form-label">选择数据表</label>
+                            <div class="layui-input-block">
+                                <select name="tablename" lay-filter="aihao">
+                                    {% for item in table_list %}
+                                    <option value="{{ item.value }}">{{item.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">选择数据表</label>
-                        <div class="layui-input-block">
-                            <select name="interest" lay-filter="aihao">
-                                {% for item in table_list %}
-                                <option value="{{ item.value }}">{{item.name}}</option>
+                        <div class="layui-form-item layui-col-md6">
+                            <label class="layui-form-label">生成代码类型</label>
+                            <div class="layui-input-block">
+                                {% for checkbox in template_list%}
+                                <input type="checkbox" name="templates" value="{{ checkbox.value }}"
+                                       title="{{ checkbox.name }}">
                                 {% endfor %}
-                            </select>
+                            </div>
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label">生成代码类型</label>
-                        <div class="layui-input-block">
-                            <input type="checkbox" name="like[write]" title="写作">
-                            <input type="checkbox" name="like[read]" title="阅读">
-                            <input type="checkbox" name="like[write]" title="写作">
-                            <input type="checkbox" name="like[read]" title="阅读">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
+                        <div class="layui-input-block" style="text-align: center">
                             <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
-                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
                         </div>
                     </div>
                     <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
@@ -68,11 +82,11 @@
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="/static/plugins/layui/layui.all.js"></script>
 <script>
-    // layui.use('form', function () {
-    //     var form = layui.form;
-    //
-    //     //各种基于事件的操作，下面会有进一步介绍
-    // });
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //各种基于事件的操作，下面会有进一步介绍
+    });
 </script>
 </body>
 </html>
