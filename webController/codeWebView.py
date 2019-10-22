@@ -6,9 +6,9 @@
 # @Software: PyCharm
 import os
 
-from APP.config import GENERATOR_DB, GENERATOR_TEMPLATES
+from webController.config import GENERATOR_DB, GENERATOR_TEMPLATES
 from CodeGenerator.codeGeneratorfactory import CodeGeneratorFactory
-from utils.sqlutils import mysql_db
+from dbConnect.sqlutils import mysql_db
 
 BaseDir = os.path.dirname(os.path.abspath(__name__))
 

@@ -11,10 +11,16 @@ import os
 from jinja2 import TemplateNotFound
 
 from CodeGenerator.CodeGeneratorCore import CodeGenerator
-from utils.sqlutils import mysql_db
+from dbConnect.sqlutils import mysql_db
 
 
 class GeneratorBase(metaclass=ABCMeta):
+    """
+        模板代码生成器基类
+    子类继承该类，实现formatter_data方法格式化数据到模板对象需要的数据类型
+    template    指定模板路径及名称
+    template_dir    jinja查找模板目录
+    """
     template = None
     BaseDir = os.path.dirname(os.path.abspath(__name__))
     template_dir = os.path.join(BaseDir, 'template')
@@ -73,6 +79,9 @@ class GeneratorBase(metaclass=ABCMeta):
 
 
 class GeneratorTeseHtml(GeneratorBase):
+    """
+    test.html模板渲染类
+    """
     template = 'test.html.tpl'
 
     def __init__(self, db=None):
@@ -91,6 +100,9 @@ class GeneratorTeseHtml(GeneratorBase):
 
 
 class GeneratorTesePY(GeneratorBase):
+    """
+    test.py模板文件渲染类
+    """
     template = 'test.py.tpl'
 
     def __init__(self, db=None):
