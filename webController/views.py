@@ -6,45 +6,30 @@
 # @Software: PyCharm
 
 
-from flask import render_template,request
+from flask import render_template, request, jsonify
+
+from webController.codeWebView import CodeViewOptions
 
 
 def code_page():
     return render_template('code.html', **{
-        'table_list': [
-            {
-                "name": 'test',
-                "value": 1
-            },
-            {
-                "name": 'test1',
-                "value": 2
-            }
-        ],
-        "template_list":[
-            {
-                "name": 'list.html-列表页面',
-                "value": 'list.html'
-            },
-            {
-                "name": 'edit.html-新建编辑页面',
-                "value": 'edit.html'
-            },
-            {
-                "name": 'view.html-查看详情页面',
-                "value": 'view.html'
-            },
-            {
-                "name": 'views.py-后端视图',
-                "value": 'views.py'
-            },
-            {
-                "name": 'options_obj.py-表对象',
-                "value": 'options_obj.py'
-            },
-            {
-                "name": 'urls.py-路由管理',
-                "value": 'urls.py'
-            },
-        ]
+        'table_list': CodeViewOptions.get_all_tables(),
+        "template_list": CodeViewOptions.get_all_tamplates()
     })
+
+
+def create_code():
+    table_name = request.form.get('tablename', '')
+    templates = request.form.getlist('templates[]')
+    output = request.form.get('output', '')
+    if table_name == '' or len(templates) == 0 or output == '':
+        return jsonify({'code': 400, 'msg': '必填参数'})
+    try:
+        CodeViewOptions().formatter_and_create(table_name, output, templates)
+        return jsonify({'code': 200, 'msg': '请求成功', 'data': request.form.to_dict()})
+    except Exception as e:
+        if len(e.args) > 1 and e.args[0] == '文件已存在！':
+            return jsonify({'code': 200, 'msg': '指定目录下存在同名文件，停止创建。'})
+        import traceback
+        print(traceback.format_exc())
+        return jsonify({'code': 0, 'msg': '生成失败'})

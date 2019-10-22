@@ -14,13 +14,28 @@
 
         .layui-form-item {
             margin-bottom: 15px;
-             clear: none;
+            clear: none;
             *zoom: 1;
         }
 
         .layui-form-item .layui-form-checkbox {
             margin-top: 4px;
             display: table;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+            min-height: 36px;
         }
 
     </style>
@@ -30,23 +45,16 @@
 <div class="layui-container" style="margin-top: 50px;">
     <div class="layui-row">
         <div class="layui-card">
-            <div class="layui-card-header" style="text-align: center">
+            <div class="layui-card-header" style="text-align: center;border-bottom: 1px solid #b9adad;">
                 <h2 style="text-align: center">代码生成器</h2>
             </div>
             <div class="layui-card-body layui-col-sm12">
-                <form class="layui-form">
-
-                    <!--<div class="layui-form-item">-->
-                    <!--<label class="layui-form-label">输入框</label>-->
-                    <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input">-->
-                    <!--</div>-->
-                    <!--</div>-->
+                <form class="layui-form" method="post" lay-filter="CodeForm">
                     <div class="layui-row">
                         <div class="layui-form-item layui-col-md6">
                             <label class="layui-form-label">选择数据表</label>
                             <div class="layui-input-block">
-                                <select name="tablename" lay-filter="aihao">
+                                <select name="tablename" lay-verify="required" lay-filter="aihao">
                                     {% for item in table_list %}
                                     <option value="{{ item.value }}">{{item.name}}</option>
                                     {% endfor %}
@@ -61,6 +69,13 @@
                                        title="{{ checkbox.name }}">
                                 {% endfor %}
                             </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">输出路径</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="output" lay-verify="required" value="/template/test/" placeholder="请输入输出相对路径" autocomplete="off"
+                                   class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -84,8 +99,29 @@
 <script>
     layui.use('form', function () {
         var form = layui.form;
+        form.on('checkbox', function (data) {
+            console.log(data)
+        })
 
-        //各种基于事件的操作，下面会有进一步介绍
+        form.on('submit', function (data) {
+            console.log(data)
+            var temp_field = []
+            $("input:checkbox[name='templates']:checked").each(function () {
+                temp_field.push($(this).val());
+            });
+            data.field.templates = temp_field
+            $.ajax({
+                type: "post",
+                async: "false",
+                url: "http://127.0.0.1:8081/code/create/",
+                data: data.field,
+                dataType: "json",
+                success: function (data) {
+                    alert(JSON.stringify(data));
+                }
+            })
+            return false
+        })
     });
 </script>
 </body>
