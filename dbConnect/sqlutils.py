@@ -4,7 +4,7 @@ import pymysql
 import time
 from DBUtils.PooledDB import PooledDB
 
-from utils.config import DBConfig
+from dbConnect.config import DBConfig
 
 
 class OPMysql:

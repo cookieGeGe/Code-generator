@@ -8,18 +8,26 @@ from abc import ABCMeta, abstractmethod
 
 import os
 
+from jinja2 import TemplateNotFound
+
 from CodeGenerator.CodeGeneratorCore import CodeGenerator
-from utils.sqlutils import mysql_db
+from dbConnect.sqlutils import mysql_db
 
 
 class GeneratorBase(metaclass=ABCMeta):
+    """
+        模板代码生成器基类
+    子类继承该类，实现formatter_data方法格式化数据到模板对象需要的数据类型
+    template    指定模板路径及名称
+    template_dir    jinja查找模板目录
+    """
+    template = None
     BaseDir = os.path.dirname(os.path.abspath(__name__))
     template_dir = os.path.join(BaseDir, 'template')
 
-    def __init__(self, template, db=None):
+    def __init__(self, db=None):
         self._generator = None
         self.db = db
-        self.template = template
         self.table_info = None
         self._init()
 
@@ -39,6 +47,8 @@ class GeneratorBase(metaclass=ABCMeta):
         :param kwargs:
         :return:
         """
+        if not self.template:
+            raise TemplateNotFound('内部错误，没有找到模板文件')
         self._generator.set_template(self.template)
         self._generator.render(*args, **kwargs)
 
@@ -69,9 +79,34 @@ class GeneratorBase(metaclass=ABCMeta):
 
 
 class GeneratorTeseHtml(GeneratorBase):
+    """
+    test.html模板渲染类
+    """
+    template = 'test.html.tpl'
 
-    def __init__(self, template, db=None):
-        super(GeneratorTeseHtml, self).__init__(template, db)
+    def __init__(self, db=None):
+        super(GeneratorTeseHtml, self).__init__(db)
+
+    def formatter_data(self, other_data, expect_field=['ID']):
+        filter_data = []
+        for column in self.table_info:
+            if column['name'] not in expect_field:
+                filter_data.append(column)
+        data = {
+            'columns': filter_data
+        }
+        data.update(dict(other_data))
+        return data
+
+
+class GeneratorTesePY(GeneratorBase):
+    """
+    test.py模板文件渲染类
+    """
+    template = 'test.py.tpl'
+
+    def __init__(self, db=None):
+        super(GeneratorTesePY, self).__init__(db)
 
     def formatter_data(self, other_data, expect_field=['ID']):
         filter_data = []
