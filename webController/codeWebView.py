@@ -6,6 +6,7 @@
 # @Software: PyCharm
 import os
 
+from CodeGenerator.PyCodeGenerator import CodeGenerator
 from webController.config import GENERATOR_DB, GENERATOR_TEMPLATES
 from CodeGenerator.codeGeneratorfactory import CodeGeneratorFactory
 from dbConnect.sqlutils import mysql_db
@@ -13,10 +14,10 @@ from dbConnect.sqlutils import mysql_db
 BaseDir = os.path.dirname(os.path.abspath(__name__))
 
 
-class CodeViewOptions:
+class CodeViewOptions(CodeGenerator):
 
     def __init__(self):
-        pass
+        super(CodeViewOptions, self).__init__()
 
     @staticmethod
     def get_all_tables():
@@ -43,7 +44,7 @@ class CodeViewOptions:
         return templates_list
 
     @staticmethod
-    def generator_file(generator_type, export_file_path, db_name, tb_name, other_dict):
+    def generator_file_old(generator_type, export_file_path, db_name, tb_name, other_dict):
         """生成文档"""
         factory = CodeGeneratorFactory()  # 初始化代码生成器工厂
         template = factory.get_codegenerator(generator_type)  # 获取指定类型代码生成器对象
@@ -63,4 +64,5 @@ class CodeViewOptions:
                 continue
             # template_file = GENERATOR_TEMPLATES[template]['template']
             export = os.path.join(BaseDir, *output.split('/'))
-            self.generator_file(template, export, GENERATOR_DB, tb_name, {})
+            # self.generator_file(template, export, GENERATOR_DB, tb_name, {})
+            self.generator_file(template, GENERATOR_DB, tb_name, export)

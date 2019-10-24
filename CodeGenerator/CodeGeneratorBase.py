@@ -10,7 +10,7 @@ import os
 
 from jinja2 import TemplateNotFound
 
-from CodeGenerator.CodeGeneratorCore import CodeGenerator
+from CodeGenerator.CodeGeneratorCore import CoreCodeGenerator
 from dbConnect.sqlutils import mysql_db
 
 
@@ -37,7 +37,7 @@ class GeneratorBase(metaclass=ABCMeta):
         初始化代码生成器核心对象，指定模板目录
         :return:
         """
-        self._generator = CodeGenerator(self.template_dir)
+        self._generator = CoreCodeGenerator(self.template_dir)
         if self.db is None:
             self.db = mysql_db
 
