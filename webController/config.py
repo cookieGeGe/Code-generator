@@ -14,5 +14,13 @@ GENERATOR_TEMPLATES = {
     "testpy": {
         "template": 'test.py.tpl',
         "name": "test.py-测试模板"
+    },
+    "view": {
+        "template": 'views.py.tpl',
+        "name": "views.py-视图函数"
+    },
+    "url": {
+        "template": 'url.py.tpl',
+        "name": "url.py-路由函数"
     }
 }

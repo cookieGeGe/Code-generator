@@ -8,7 +8,7 @@ import os
 from jinja2 import Environment, FileSystemLoader
 
 
-class CodeGenerator(object):
+class CoreCodeGenerator(object):
 
     def __init__(self, template_dir):
         self.jinja = None

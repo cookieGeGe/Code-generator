@@ -10,7 +10,7 @@ import os
 
 from jinja2 import TemplateNotFound
 
-from CodeGenerator.CodeGeneratorCore import CodeGenerator
+from CodeGenerator.CodeGeneratorCore import CoreCodeGenerator
 from dbConnect.sqlutils import mysql_db
 
 
@@ -28,6 +28,7 @@ class GeneratorBase(metaclass=ABCMeta):
     def __init__(self, db=None):
         self._generator = None
         self.db = db
+        self.tb_name = None
         self.table_info = None
         self._init()
 
@@ -36,7 +37,7 @@ class GeneratorBase(metaclass=ABCMeta):
         初始化代码生成器核心对象，指定模板目录
         :return:
         """
-        self._generator = CodeGenerator(self.template_dir)
+        self._generator = CoreCodeGenerator(self.template_dir)
         if self.db is None:
             self.db = mysql_db
 
@@ -59,9 +60,11 @@ class GeneratorBase(metaclass=ABCMeta):
         :param encoding:
         :return:
         """
-        self._generator.save(out_file_path, encoding)
+        save_path = os.path.join(out_file_path, self.template.replace('.tpl', ''))
+        self._generator.save(save_path, encoding)
 
     def query_data(self, db_name, tb_name):
+        self.tb_name = tb_name
         query_sql = r"""SELECT COLUMN_NAME as name,COLUMN_COMMENT as content,DATA_TYPE as datatype 
                         FROM information_schema.COLUMNS 
                         WHERE TABLE_NAME='{}' AND TABLE_SCHEMA='{}';""".format(tb_name, db_name)
@@ -115,6 +118,66 @@ class GeneratorTesePY(GeneratorBase):
                 filter_data.append(column)
         data = {
             'columns': filter_data
+        }
+        data.update(dict(other_data))
+        return data
+
+
+class GeneratorViewPY(GeneratorBase):
+    """
+    test.py模板文件渲染类
+    """
+    template = 'views.py.tpl'
+
+    def __init__(self, db=None):
+        super(GeneratorViewPY, self).__init__(db)
+
+    def formatter_data(self, other_data, expect_field=['ID']):
+        filter_data = []
+        time_list = []
+        for column in self.table_info:
+            if column['name'] not in expect_field:
+                filter_data.append(column)
+                if column['name'].lower().find('time') != -1:
+                    time_list.append(column['name'])
+        capitalize_name = self.tb_name.split('_')[-1].capitalize()
+        data = {
+            'columns': filter_data,
+            'tbname': self.tb_name,
+            'BaseName': capitalize_name + 'Base',
+            'queryName': 'Query' + capitalize_name,
+            'createName': 'Create' + capitalize_name,
+            'removeName': 'Remove' + capitalize_name,
+            'formatter_time_list': time_list,
+        }
+        data.update(dict(other_data))
+        return data
+
+class GeneratorUrlPY(GeneratorBase):
+    """
+    test.py模板文件渲染类
+    """
+    template = 'url.py.tpl'
+
+    def __init__(self, db=None):
+        super(GeneratorUrlPY, self).__init__(db)
+
+    def formatter_data(self, other_data, expect_field=['ID']):
+        filter_data = []
+        time_list = []
+        for column in self.table_info:
+            if column['name'] not in expect_field:
+                filter_data.append(column)
+                if column['name'].lower().find('time') != -1:
+                    time_list.append(column['name'])
+        capitalize_name = self.tb_name.split('_')[-1].capitalize()
+        data = {
+            'columns': filter_data,
+            'baseurl': self.tb_name.split('_')[-1].lower(),
+            'BaseName': capitalize_name + 'Base',
+            'queryName': 'Query' + capitalize_name,
+            'createName': 'Create' + capitalize_name,
+            'removeName': 'Remove' + capitalize_name,
         }
         data.update(dict(other_data))
         return data
