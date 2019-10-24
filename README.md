@@ -46,3 +46,7 @@ if __name__ == '__main__':
     code_generator.generator_file('test', 'waterdevice', 'wd_device', '/test/', {'title': '设备测试页面'})
 
 ```
+
+#### 下一步计划
+
+    1. 实现生成器可动态注册模板和解析协议类（类似flask的路由注册功能）
