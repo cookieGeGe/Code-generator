@@ -4,7 +4,7 @@
 # @Site :  
 # @File : codeGeneratorfacotry.py 
 # @Software: PyCharm
-from CodeGenerator.CodeGeneratorBase import GeneratorTeseHtml, GeneratorTesePY
+from CodeGenerator.CodeGeneratorBase import GeneratorTeseHtml, GeneratorTesePY, GeneratorViewPY, GeneratorUrlPY
 
 
 class CodeGeneratorFactory:
@@ -22,3 +22,7 @@ class CodeGeneratorFactory:
             return GeneratorTeseHtml()
         elif generator_type == "testpy":
             return GeneratorTesePY()
+        elif generator_type == 'view':
+            return GeneratorViewPY()
+        elif generator_type == 'url':
+            return GeneratorUrlPY()
