@@ -5,7 +5,7 @@
 # @File : config.py 
 # @Software: PyCharm
 
-GENERATOR_DB = 'waterdevice'
+GENERATOR_DB = 'csms'
 GENERATOR_TEMPLATES = {
     "test": {
         "template": 'test.html.tpl',

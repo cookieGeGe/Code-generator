@@ -6,18 +6,20 @@
 # @Software: PyCharm
 import os
 
-from CodeGenerator.PyCodeGenerator import CodeGenerator
+# from CodeGenerator.PyCodeGenerator import CodeGenerator
+from NewApp.functions import codeGenerator
 from webController.config import GENERATOR_DB, GENERATOR_TEMPLATES
-from CodeGenerator.codeGeneratorfactory import CodeGeneratorFactory
+# from CodeGenerator.codeGeneratorfactory import CodeGeneratorFactory
 from dbConnect.sqlutils import mysql_db
 
 BaseDir = os.path.dirname(os.path.abspath(__name__))
 
 
-class CodeViewOptions(CodeGenerator):
+class CodeViewOptions(object):
 
     def __init__(self):
         super(CodeViewOptions, self).__init__()
+        self.db = mysql_db
 
     @staticmethod
     def get_all_tables():
@@ -43,26 +45,35 @@ class CodeViewOptions(CodeGenerator):
             })
         return templates_list
 
-    @staticmethod
-    def generator_file_old(generator_type, export_file_path, db_name, tb_name, other_dict):
-        """生成文档"""
-        factory = CodeGeneratorFactory()  # 初始化代码生成器工厂
-        template = factory.get_codegenerator(generator_type)  # 获取指定类型代码生成器对象
-        template.query_data(db_name, tb_name)  # 查询指定表数据
-        data = template.formatter_data(other_dict)  # 格式化数据并返回
-        template.render(data)  # 渲染模板
-        if not os.path.exists(os.path.dirname(export_file_path)):
-            os.makedirs(os.path.dirname(export_file_path))
-        # if os.path.exists(export_file):
-        #     raise Exception('文件已存在！')
-        template.save(export_file_path)  # 生成代码文件
-
+    # @staticmethod
+    # def generator_file_old(generator_type, export_file_path, db_name, tb_name, other_dict):
+    #     """生成文档"""
+    #     factory = CodeGeneratorFactory()  # 初始化代码生成器工厂
+    #     template = factory.get_codegenerator(generator_type)  # 获取指定类型代码生成器对象
+    #     template.query_data(db_name, tb_name)  # 查询指定表数据
+    #     data = template.formatter_data(other_dict)  # 格式化数据并返回
+    #     template.render(data)  # 渲染模板
+    #     if not os.path.exists(os.path.dirname(export_file_path)):
+    #         os.makedirs(os.path.dirname(export_file_path))
+    #     # if os.path.exists(export_file):
+    #     #     raise Exception('文件已存在！')
+    #     template.save(export_file_path)  # 生成代码文件
+    #
     def formatter_and_create(self, tb_name, output, templates):
 
         for template in templates:
-            if template not in GENERATOR_TEMPLATES.keys():
-                continue
-            # template_file = GENERATOR_TEMPLATES[template]['template']
-            export = os.path.join(BaseDir, *output.split('/'))
-            # self.generator_file(template, export, GENERATOR_DB, tb_name, {})
-            self.generator_file(template, GENERATOR_DB, tb_name, export)
+            # if template not in GENERATOR_TEMPLATES.keys():
+            #     continue
+            # # template_file = GENERATOR_TEMPLATES[template]['template']
+            # export = os.path.join(BaseDir, *output.split('/'))
+            # # self.generator_file(template, export, GENERATOR_DB, tb_name, {})
+            # self.generator_file(template, GENERATOR_DB, tb_name, export)
+
+            # flask版本使用教程
+            template_obj = codeGenerator.get_register_template(template)
+            if template_obj:
+                template_obj = template_obj(mysql_db)
+            template_obj.query_data('csms', tb_name)
+            tempdata = template_obj.formatter_data({})
+            template_obj.render(tempdata)
+            template_obj.save(output)

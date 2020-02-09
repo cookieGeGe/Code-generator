@@ -21,7 +21,7 @@ class CodeGenerator:
 
     def init_generator(self, type):
         self.generator = self.factory.get_codegenerator(type)
-        return self.generator
+        return self.generator(self.db)
 
     def check_generator(self):
         if not self.generator:

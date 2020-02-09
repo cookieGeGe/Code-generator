@@ -19,7 +19,7 @@ class Development:
     user = 'root'
     password = 'admin123'
     port = 3306
-    db = 'test'
+    db = 'csms'
     mincached = 2
     maxconnections = 5
     charset = 'utf8'

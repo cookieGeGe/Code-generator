@@ -4,10 +4,12 @@
 # @Site :  
 # @File : views.py 
 # @Software: PyCharm
-
+import os
 
 from flask import render_template, request, jsonify
 
+from NewApp.templates import GeneratorTeseHtml
+from dbConnect.sqlutils import mysql_db
 from webController.codeWebView import CodeViewOptions
 
 
@@ -26,6 +28,11 @@ def create_code():
         return jsonify({'code': 400, 'msg': '必填参数'})
     try:
         CodeViewOptions().formatter_and_create(table_name, output, templates)
+        # template = GeneratorTeseHtml(mysql_db)
+        # template.query_data('csms', table_name)
+        # template.formatter_data({})
+        # template.render()
+        # template.save(output)
         return jsonify({'code': 200, 'msg': '请求成功', 'data': request.form.to_dict()})
     except Exception as e:
         if len(e.args) > 1 and e.args[0] == '文件已存在！':
