@@ -27,7 +27,11 @@ class CodeGenerator(object):
             raise Exception('APP is None!')
         app.config.setdefault('CODEGENERATOR_TEMPLATE_DIR', app.template_folder)
         self.template_dir = app.config.get('CODEGENERATOR_TEMPLATE_DIR')
-        self.Template.init(self.template_dir, self)
+        if 'sqlalchemy' not in app.extensions.keys():
+            raise Exception('This plugin depends on "sqlalchemy",'
+                            'please configure and initialize "sqlalchemy" in Flask app.')
+        db = app.extensions['sqlalchemy']
+        self.Template.init(self.template_dir, self, db)
         app.extensions['codeGenerator'] = self
         self.init()
 

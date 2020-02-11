@@ -13,8 +13,8 @@ class GeneratorTeseHtml(codeGenerator.Template):
     """
     template = 'test.html.tpl'
 
-    def __init__(self, db=None):
-        super(GeneratorTeseHtml, self).__init__(db)
+    def __init__(self):
+        super(GeneratorTeseHtml, self).__init__()
 
     def formatter_data(self, other_data, expect_field=['ID']):
         filter_data = []
@@ -34,8 +34,8 @@ class GeneratorTesePY(codeGenerator.Template):
     """
     template = 'test.py.tpl'
 
-    def __init__(self, db=None):
-        super(GeneratorTesePY, self).__init__(db)
+    def __init__(self):
+        super(GeneratorTesePY, self).__init__()
 
     def formatter_data(self, other_data, expect_field=['ID']):
         filter_data = []
@@ -55,8 +55,8 @@ class GeneratorViewPY(codeGenerator.Template):
     """
     template = 'views.py.tpl'
 
-    def __init__(self, db=None):
-        super(GeneratorViewPY, self).__init__(db)
+    def __init__(self):
+        super(GeneratorViewPY, self).__init__()
 
     def formatter_data(self, other_data, expect_field=['ID']):
         filter_data = []
@@ -85,8 +85,8 @@ class GeneratorUrlPY(codeGenerator.Template):
     """
     template = 'url.py.tpl'
 
-    def __init__(self, db=None):
-        super(GeneratorUrlPY, self).__init__(db)
+    def __init__(self):
+        super(GeneratorUrlPY, self).__init__()
 
     def formatter_data(self, other_data, expect_field=['ID']):
         filter_data = []

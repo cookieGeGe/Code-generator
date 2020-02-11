@@ -9,6 +9,8 @@ from abc import abstractmethod, ABCMeta
 
 from jinja2 import TemplateNotFound
 
+from GeneratorFlask.mysqlUtils import MysqlDB
+
 
 class GeneratorTemplate(metaclass=ABCMeta):
     """
@@ -23,20 +25,21 @@ class GeneratorTemplate(metaclass=ABCMeta):
     # template_dir = os.path.join(BaseDir, 'template')
     template_dir = None
     _generator = None
+    _db = None
 
-    def __init__(self, db=None):
-        self.db = db
+    def __init__(self):
         self.tb_name = None
         self.table_info = None
 
     @classmethod
-    def init(cls, template, generator):
+    def init(cls, template, generator, db):
         """
         初始化代码生成器核心对象，指定模板目录
         :return:
         """
         cls.template_dir = template
         cls._generator = generator
+        cls._db = MysqlDB(db.db)
 
     def render(self, *args, **kwargs):
         """
@@ -65,7 +68,7 @@ class GeneratorTemplate(metaclass=ABCMeta):
         query_sql = r"""SELECT COLUMN_NAME as name,COLUMN_COMMENT as content,DATA_TYPE as datatype 
                         FROM information_schema.COLUMNS 
                         WHERE TABLE_NAME='{}' AND TABLE_SCHEMA='{}';""".format(tb_name, db_name)
-        self.table_info = self.db.query(query_sql)
+        self.table_info = self._db.query(query_sql)
 
     @abstractmethod
     def formatter_data(self, *args, **kwargs):
@@ -76,3 +79,9 @@ class GeneratorTemplate(metaclass=ABCMeta):
         :return:
         """
         pass
+
+    def default_render_save(self, base_name, tb_name, output):
+        self.query_data(base_name, tb_name)
+        tempdata = self.formatter_data({})
+        self.render(tempdata)
+        self.save(output)

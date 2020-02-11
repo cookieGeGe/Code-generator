@@ -72,8 +72,5 @@ class CodeViewOptions(object):
             # flask版本使用教程
             template_obj = codeGenerator.get_register_template(template)
             if template_obj:
-                template_obj = template_obj(mysql_db)
-            template_obj.query_data('csms', tb_name)
-            tempdata = template_obj.formatter_data({})
-            template_obj.render(tempdata)
-            template_obj.save(output)
+                template_obj = template_obj()
+                template_obj.default_render_save('csms', tb_name, output)
