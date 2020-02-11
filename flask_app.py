@@ -4,9 +4,9 @@
 # @Site :  
 # @File : flask_app.py 
 # @Software: PyCharm
-import os
-from NewApp.APP import create_app
-from NewApp.config import Config
+
+from APP.APP import create_app
+from APP.config import Config
 from webController.urls import code_generator
 
 app = create_app(Config)

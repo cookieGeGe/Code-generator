@@ -5,7 +5,7 @@
 # @File : codeGeneratorfacotry.py 
 # @Software: PyCharm
 # from CodeGenerator.CodeGeneratorBase import GeneratorTeseHtml, GeneratorTesePY, GeneratorViewPY, GeneratorUrlPY
-from NewApp.templates import GeneratorTeseHtml, GeneratorTesePY, GeneratorUrlPY, GeneratorViewPY
+from APP.templates import GeneratorTeseHtml, GeneratorTesePY, GeneratorUrlPY, GeneratorViewPY
 
 
 class CodeGeneratorFactory:

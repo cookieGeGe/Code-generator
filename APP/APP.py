@@ -6,9 +6,9 @@
 # @Software: PyCharm
 from flask import Flask
 
-from NewApp.functions import init_ext, codeGenerator
-from NewApp.regist import regist
-from NewApp.settings import templates_dir, static_dir
+from APP.functions import init_ext, codeGenerator
+from APP.regist import regist
+from APP.settings import templates_dir, static_dir
 
 
 def create_app(config):

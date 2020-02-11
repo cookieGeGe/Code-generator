@@ -6,7 +6,7 @@
 # @Software: PyCharm
 import os
 
-from NewApp.functions import get_db_uri
+from APP.functions import get_db_uri
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

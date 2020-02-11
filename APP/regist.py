@@ -4,7 +4,7 @@
 # @Site :
 # @File : regist.py
 # @Software: PyCharm
-from NewApp.templates import GeneratorTeseHtml, GeneratorTesePY, GeneratorUrlPY, GeneratorViewPY
+from APP.templates import GeneratorTeseHtml, GeneratorTesePY, GeneratorUrlPY, GeneratorViewPY
 
 
 def regist(code):

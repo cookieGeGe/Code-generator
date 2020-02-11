@@ -4,7 +4,7 @@
 # @Site :
 # @File : templates.py
 # @Software: PyCharm
-from NewApp.functions import codeGenerator
+from APP.functions import codeGenerator
 
 
 class GeneratorTeseHtml(codeGenerator.Template):

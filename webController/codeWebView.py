@@ -7,7 +7,7 @@
 import os
 
 # from CodeGenerator.PyCodeGenerator import CodeGenerator
-from NewApp.functions import codeGenerator
+from APP.functions import codeGenerator
 from webController.config import GENERATOR_DB, GENERATOR_TEMPLATES
 # from CodeGenerator.codeGeneratorfactory import CodeGeneratorFactory
 from dbConnect.sqlutils import mysql_db
@@ -45,6 +45,7 @@ class CodeViewOptions(object):
             })
         return templates_list
 
+    # 老版本代码生成
     # @staticmethod
     # def generator_file_old(generator_type, export_file_path, db_name, tb_name, other_dict):
     #     """生成文档"""
@@ -62,13 +63,6 @@ class CodeViewOptions(object):
     def formatter_and_create(self, tb_name, output, templates):
 
         for template in templates:
-            # if template not in GENERATOR_TEMPLATES.keys():
-            #     continue
-            # # template_file = GENERATOR_TEMPLATES[template]['template']
-            # export = os.path.join(BaseDir, *output.split('/'))
-            # # self.generator_file(template, export, GENERATOR_DB, tb_name, {})
-            # self.generator_file(template, GENERATOR_DB, tb_name, export)
-
             # flask版本使用教程
             template_obj = codeGenerator.get_register_template(template)
             if template_obj:

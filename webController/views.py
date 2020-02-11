@@ -4,12 +4,8 @@
 # @Site :  
 # @File : views.py 
 # @Software: PyCharm
-import os
 
 from flask import render_template, request, jsonify
-
-from NewApp.templates import GeneratorTeseHtml
-from dbConnect.sqlutils import mysql_db
 from webController.codeWebView import CodeViewOptions
 
 
