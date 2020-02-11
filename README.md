@@ -4,6 +4,123 @@
 
 该代码生成器目的旨在通过模板文件，生成相同模板的不同数据的代码文件（说白了就是为了在写web时偷懒少写一些针对表的增删改查操作）。
 
+
+### 构建Flask版本
+
+#### 文档说明
+
+    GeneratorFlask/__init__.py  Flask版本代码生成器核心对象
+    
+    GeneratorFlask/template.py  Flask版本模板处理对象基类
+    
+    GeneratorFlask/mysqlUtils.py    Flask版本基于SQLAlchemy链接mysql内部使用对象
+
+#### 使用方法
+
+1. 配置代码生成器模板目录：
+
+```python
+# 在Flask app的配置文件中加入 
+CODEGENERATOR_TEMPLATE_DIR = '/temp/test'
+```
+
+2. 实例化代码生成器对象，并初始化
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+
+from GeneratorFlask import CodeGenerator
+
+codeGenerator = CodeGenerator()
+db = SQLAlchemy()
+
+# SQLAlchemy的初始化必须在代码生成器的初始化之前，否则会出现在代码生成器初始化时找不到数据库连接对象
+def init_ext(app):
+    db.init_app(app)
+    codeGenerator.init_app(app)
+```
+
+3. 实现对应模板处理子类
+
+```python
+from APP.functions import codeGenerator
+
+
+class GeneratorTeseHtml(codeGenerator.Template):
+    """
+    test.html模板渲染类 
+    """
+    # 模板文件在代码生成器模板目录中的相对位置
+    template = 'test.html.tpl'
+
+    def __init__(self):
+        super(GeneratorTeseHtml, self).__init__()
+
+    # 重写该方法实现将数据转换为模板文件中需要的数据格式，带返回值
+    def formatter_data(self, other_data, expect_field=['ID']):
+        filter_data = []
+        for column in self.table_info:
+            if column['name'] not in expect_field:
+                filter_data.append(column)
+        data = {
+            'columns': filter_data
+        }
+        data.update(dict(other_data))
+        return data
+
+```
+
+4. 模板注册
+
+- 调用模板注册
+```python
+from flask import Flask
+
+from APP.functions import init_ext, codeGenerator
+from APP.regist import regist
+from APP.settings import templates_dir, static_dir
+
+
+def create_app(config):
+    app = Flask(__name__, template_folder=templates_dir, static_folder=static_dir)
+    app.config.from_object(config)
+    init_ext(app)
+    # 实现模板注册的调用，之后则可以在全局下通过codeGenerator对象获取到指定模板的处理子类
+    regist(codeGenerator)
+    return app
+```
+
+-   模板注册
+```python
+from APP.templates import GeneratorTeseHtml
+
+
+def regist(code):
+    code.register_template('test', GeneratorTeseHtml)
+```
+
+5. 代码生成器的使用
+- 基于codeGenerator对象中的已注册模板子类获取
+```python
+from APP.functions import codeGenerator
+
+template_obj = codeGenerator.get_register_template('注册的模板名')
+if template_obj:
+    template_obj = template_obj()
+    template_obj.default_render_save('db_name', 'tb_name', 'output_path')
+```
+
+- 引用具体的模板子类对象
+```python
+from APP.templates import GeneratorTeseHtml
+
+
+template_obj = GeneratorTeseHtml()
+template_obj.default_render_save('db_name', 'tb_name', 'output_path')
+```
+
+### 老版本
+
 ###### 使用说明：
 
     CodeGeneratorCore.py   代码生成器核心对象
@@ -49,4 +166,5 @@ if __name__ == '__main__':
 
 #### 下一步计划
 
-    1. 实现生成器可动态注册模板和解析协议类（类似flask的路由注册功能）
+    1. 完善生成的文件输出问题。
+    2. 进一步完善flask版本代码生成器功能，查找设计不合理的地方并修改，避免循环引用的问题
